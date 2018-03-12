@@ -16,10 +16,10 @@ public class ButtonEvent : Photon.PunBehaviour, IPunObservable {
     }
     public void Clicked() {
         //Debug.Log(buttonId.ToString() + " was clicked");
-        //StartCoroutine(ClickedAnim());
+        StartCoroutine(ClickedAnim(true));
 
-        GetComponent<AudioSource>().PlayOneShot(SFX);
-        GeniusManager.Instance.InputHandler(buttonId);
+        //GetComponent<AudioSource>().PlayOneShot(SFX);
+        //GeniusManager.Instance.InputHandler(buttonId);
     }
 
     void ClickTest() { 
@@ -29,7 +29,10 @@ public class ButtonEvent : Photon.PunBehaviour, IPunObservable {
     [PunRPC]
     public void Highlight() { 
         Debug.Log("Highlight");
-        StartCoroutine(ChangeColor());
+        //StartCoroutine(ChangeColor());
+
+        StartCoroutine(ClickedAnim(false));
+
     }
     public IEnumerator ChangeColor() {
         Sprite originalImg = GetComponent<Image>().sprite;
@@ -41,14 +44,16 @@ public class ButtonEvent : Photon.PunBehaviour, IPunObservable {
         GetComponent<Image>().sprite = originalImg;
         GetComponent<Button>().enabled = true;
     }
-    public IEnumerator ClickedAnim() {
+    public IEnumerator ClickedAnim(bool addInput) {
         GetComponent<AudioSource>().PlayOneShot(SFX);
-        GeniusManager.Instance.InputHandler(buttonId);
 
         for (int i = 0; i < animationFrames.Length; i++) {
             GetComponent<Image>().sprite = animationFrames[i];
             yield return new WaitForSeconds(animationDelay);
         }
+        if(addInput)
+            GeniusManager.Instance.InputHandler(buttonId);
+
     }
 
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {

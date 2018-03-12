@@ -226,6 +226,7 @@ public class GeniusManager : Photon.PunBehaviour, IPunObservable {
         sequence.AddRange(myarray);
 
         SetGameState(6);
+        Handheld.Vibrate();
         //GameObject.Find("Instruction").GetComponent<Text>().text = "It's your turn";
         SetFeedbackText(false);
         GameObject.Find("ActionButton").GetComponent<Button>().interactable = true;
